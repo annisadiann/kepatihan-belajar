@@ -3,6 +3,19 @@ import { Menu, X, Home, BookOpen } from 'lucide-react';
 
 export default function Navbar({ activeMenu, setActiveMenu }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [tapCount, setTapCount] = useState(0);
+
+  const handleLogoTap = () => {
+    const nextCount = tapCount + 1;
+    if (nextCount >= 5) {
+      setTapCount(0);
+      setMobileMenuOpen(false);
+      setActiveMenu('admin_login');
+    } else {
+      setTapCount(nextCount);
+      setTimeout(() => setTapCount(0), 1500);
+    }
+  };
 
   return (
     <header className="w-full bg-white border-b-2 border-zinc-900 sticky top-0 z-20">
@@ -10,8 +23,9 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
         
         {}
         <div 
-          onClick={() => { setActiveMenu('beranda'); setMobileMenuOpen(false); }}
-          className="flex items-center gap-3 cursor-pointer shrink-0 md:flex-1"
+          onClick={handleLogoTap}
+          className="flex items-center gap-3 cursor-pointer shrink-0 md:flex-1 select-none active:scale-95 transition-transform"
+          title="Ketuk 5x untuk Admin"
         >
           <div className="h-11 md:h-12 px-2 bg-white border-2 border-zinc-900 rounded-2xl shadow-[2px_2px_0px_0px_rgba(24,24,27,1)] flex items-center justify-center">
             <img 
@@ -35,7 +49,7 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
           </div>
         </div>
 
-        {}
+        {/}
         <div className="hidden md:flex justify-center items-center shrink-0">
           <nav className="flex items-center bg-zinc-100 p-1.5 rounded-2xl border-2 border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]">
             <button 
@@ -68,7 +82,7 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
         <div className="flex md:hidden items-center">
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="bg-yellow-400 text-zinc-950 p-2 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]"
+            className="bg-yellow-400 text-zinc-950 p-2 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)] active:translate-x-0.5 active:translate-y-0.5 transition"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -82,7 +96,7 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
           <button 
             onClick={() => { setActiveMenu('beranda'); setMobileMenuOpen(false); }}
             className={`w-full text-left p-3 rounded-xl border-2 border-zinc-900 flex items-center gap-2 ${
-              activeMenu === 'beranda' ? 'bg-white' : 'bg-yellow-400'
+              activeMenu === 'beranda' ? 'bg-white text-zinc-950' : 'bg-yellow-400 text-zinc-900'
             }`}
           >
             <Home className="w-4 h-4" /> Beranda
@@ -90,7 +104,7 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
           <button 
             onClick={() => { setActiveMenu('modul'); setMobileMenuOpen(false); }}
             className={`w-full text-left p-3 rounded-xl border-2 border-zinc-900 flex items-center gap-2 ${
-              activeMenu === 'modul' ? 'bg-white' : 'bg-yellow-400'
+              activeMenu === 'modul' ? 'bg-white text-zinc-950' : 'bg-yellow-400 text-zinc-900'
             }`}
           >
             <BookOpen className="w-4 h-4" /> Modul & Soal
