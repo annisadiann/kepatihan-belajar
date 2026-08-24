@@ -1,45 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Menu, X, Home, BookOpen } from 'lucide-react';
 
 export default function Navbar({ activeMenu, setActiveMenu }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [tapCount, setTapCount] = useState(0);
+  const timerRef = useRef(null);
 
-  const handleLogoTap = () => {
-    const nextCount = tapCount + 1;
-    if (nextCount >= 5) {
-      setTapCount(0);
+  const handleHoldStart = () => {
+    timerRef.current = setTimeout(() => {
+      if (navigator.vibrate) navigator.vibrate(50);
       setMobileMenuOpen(false);
       setActiveMenu('admin_login');
-    } else {
-      setTapCount(nextCount);
-      setTimeout(() => setTapCount(0), 1500);
+    }, 2000); 
+  };
+
+  const handleHoldEnd = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
     }
   };
 
   return (
-    <header className="w-full bg-white border-b-2 border-zinc-900 sticky top-0 z-20">
+    <header className="w-full bg-white border-b-2 border-zinc-900 sticky top-0 z-20 select-none">
       <div className="w-full px-4 md:px-8 py-3 min-h-[70px] flex items-center justify-between">
         
         {}
-        <div 
-          onClick={handleLogoTap}
-          className="flex items-center gap-3 cursor-pointer shrink-0 md:flex-1 select-none active:scale-95 transition-transform"
-          title="Ketuk 5x untuk Admin"
-        >
-          <div className="h-11 md:h-12 px-2 bg-white border-2 border-zinc-900 rounded-2xl shadow-[2px_2px_0px_0px_rgba(24,24,27,1)] flex items-center justify-center">
+        <div className="flex items-center gap-3 shrink-0 md:flex-1">
+          <div 
+            onClick={() => { setActiveMenu('beranda'); setMobileMenuOpen(false); }}
+            className="h-11 md:h-12 px-2 bg-white border-2 border-zinc-900 rounded-2xl shadow-[2px_2px_0px_0px_rgba(24,24,27,1)] flex items-center justify-center cursor-pointer"
+          >
             <img 
               src="/LOGO KEPATIHAN BELAJAR.jpeg" 
               alt="Logo Kepatihan Belajar" 
-              className="h-8 md:h-8 w-auto object-contain"
+              className="h-8 md:h-8 w-auto object-contain pointer-events-none"
             />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h1 className="font-black text-base md:text-lg tracking-tight text-zinc-900 leading-none">
+              <h1 
+                onClick={() => { setActiveMenu('beranda'); setMobileMenuOpen(false); }}
+                className="font-black text-base md:text-lg tracking-tight text-zinc-900 leading-none cursor-pointer"
+              >
                 KEPATIHAN BELAJAR
               </h1>
-              <span className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400">
+              
+              {/* AREA RAHASIA: TEKAN & TAHAN BADGE JBM SELAMA 2 DETIK */}
+              <span 
+                onTouchStart={handleHoldStart}
+                onTouchEnd={handleHoldEnd}
+                onMouseDown={handleHoldStart}
+                onMouseUp={handleHoldEnd}
+                onMouseLeave={handleHoldEnd}
+                className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400 cursor-pointer active:bg-emerald-300 transition-colors"
+                title="JBM"
+              >
                 JBM
               </span>
             </div>
@@ -49,7 +63,7 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
           </div>
         </div>
 
-        {/}
+        {}
         <div className="hidden md:flex justify-center items-center shrink-0">
           <nav className="flex items-center bg-zinc-100 p-1.5 rounded-2xl border-2 border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]">
             <button 
@@ -75,10 +89,9 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
           </nav>
         </div>
 
-        {}
         <div className="hidden md:flex md:flex-1 justify-end"></div>
 
-        {}
+        {/* MOBILE BURGER BUTTON */}
         <div className="flex md:hidden items-center">
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
