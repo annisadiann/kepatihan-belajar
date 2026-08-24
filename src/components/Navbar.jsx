@@ -1,23 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Menu, X, Home, BookOpen } from 'lucide-react';
 
 export default function Navbar({ activeMenu, setActiveMenu }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const timerRef = useRef(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const clickCountRef = useRef(0);
+  const clickTimerRef = useRef(null);
 
-  const handleTouchStart = (e) => {
-    if (e.cancelable) e.preventDefault();
+  const handleSecretTripleTap = (e) => {
+    e.stopPropagation();
+    clickCountRef.current += 1;
 
-    timerRef.current = setTimeout(() => {
-      if (navigator.vibrate) navigator.vibrate(60);
+    if (clickCountRef.current >= 3) {
+      clickCountRef.current = 0;
+      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
       setMobileMenuOpen(false);
       setActiveMenu('admin_login');
-    }, 1500); 
-  };
-
-  const handleTouchEnd = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
+    } else {
+      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+      clickTimerRef.current = setTimeout(() => {
+        clickCountRef.current = 0;
+      }, 5000);
     }
   };
 
@@ -47,23 +49,13 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
               </h1>
               
               {}
-              <span 
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleTouchStart}
-                onMouseUp={handleTouchEnd}
-                onMouseLeave={handleTouchEnd}
-                onContextMenu={(e) => e.preventDefault()}
-                style={{
-                  WebkitTouchCallout: 'none',
-                  WebkitUserSelect: 'none',
-                  userSelect: 'none',
-                  touchAction: 'none'
-                }}
-                className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400 cursor-pointer active:bg-emerald-300 transition-colors inline-block"
+              <button 
+                type="button"
+                onClick={handleSecretTripleTap}
+                className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400 cursor-pointer active:bg-emerald-300 transition-colors inline-block outline-none"
               >
                 JBM
-              </span>
+              </button>
             </div>
             <p className="text-[10px] md:text-xs text-zinc-600 font-bold mt-0.5 line-clamp-1">
               Platform Belajar Seru KKN 064 UMY x PCM Pakualaman
