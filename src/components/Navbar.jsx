@@ -5,15 +5,17 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const timerRef = useRef(null);
 
-  const handleHoldStart = () => {
+  const handleTouchStart = (e) => {
+    if (e.cancelable) e.preventDefault();
+
     timerRef.current = setTimeout(() => {
-      if (navigator.vibrate) navigator.vibrate(50);
+      if (navigator.vibrate) navigator.vibrate(60);
       setMobileMenuOpen(false);
       setActiveMenu('admin_login');
-    }, 2000); 
+    }, 1500); 
   };
 
-  const handleHoldEnd = () => {
+  const handleTouchEnd = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
@@ -44,15 +46,21 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
                 KEPATIHAN BELAJAR
               </h1>
               
-              {/* AREA RAHASIA: TEKAN & TAHAN BADGE JBM SELAMA 2 DETIK */}
+              {}
               <span 
-                onTouchStart={handleHoldStart}
-                onTouchEnd={handleHoldEnd}
-                onMouseDown={handleHoldStart}
-                onMouseUp={handleHoldEnd}
-                onMouseLeave={handleHoldEnd}
-                className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400 cursor-pointer active:bg-emerald-300 transition-colors"
-                title="JBM"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onMouseDown={handleTouchStart}
+                onMouseUp={handleTouchEnd}
+                onMouseLeave={handleTouchEnd}
+                onContextMenu={(e) => e.preventDefault()}
+                style={{
+                  WebkitTouchCallout: 'none',
+                  WebkitUserSelect: 'none',
+                  userSelect: 'none',
+                  touchAction: 'none'
+                }}
+                className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400 cursor-pointer active:bg-emerald-300 transition-colors inline-block"
               >
                 JBM
               </span>
@@ -91,7 +99,7 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
 
         <div className="hidden md:flex md:flex-1 justify-end"></div>
 
-        {/* MOBILE BURGER BUTTON */}
+        {}
         <div className="flex md:hidden items-center">
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
