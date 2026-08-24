@@ -1,38 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { Menu, X, Home, BookOpen } from 'lucide-react';
 
 export default function Navbar({ activeMenu, setActiveMenu }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const clickCountRef = useRef(0);
-  const clickTimerRef = useRef(null);
-
-  const handleSecretTripleTap = (e) => {
-    e.stopPropagation();
-    clickCountRef.current += 1;
-
-    if (clickCountRef.current >= 3) {
-      clickCountRef.current = 0;
-      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
-      setMobileMenuOpen(false);
-      setActiveMenu('admin_login');
-    } else {
-      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
-      clickTimerRef.current = setTimeout(() => {
-        clickCountRef.current = 0;
-      }, 5000);
-    }
-  };
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="w-full bg-white border-b-2 border-zinc-900 sticky top-0 z-20 select-none">
       <div className="w-full px-4 md:px-8 py-3 min-h-[70px] flex items-center justify-between">
         
         {}
-        <div className="flex items-center gap-3 shrink-0 md:flex-1">
-          <div 
-            onClick={() => { setActiveMenu('beranda'); setMobileMenuOpen(false); }}
-            className="h-11 md:h-12 px-2 bg-white border-2 border-zinc-900 rounded-2xl shadow-[2px_2px_0px_0px_rgba(24,24,27,1)] flex items-center justify-center cursor-pointer"
-          >
+        <div 
+          onClick={() => { setActiveMenu('beranda'); setMobileMenuOpen(false); }}
+          className="flex items-center gap-3 cursor-pointer shrink-0 md:flex-1"
+        >
+          <div className="h-11 md:h-12 px-2 bg-white border-2 border-zinc-900 rounded-2xl shadow-[2px_2px_0px_0px_rgba(24,24,27,1)] flex items-center justify-center">
             <img 
               src="/LOGO KEPATIHAN BELAJAR.jpeg" 
               alt="Logo Kepatihan Belajar" 
@@ -41,21 +22,12 @@ export default function Navbar({ activeMenu, setActiveMenu }) {
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h1 
-                onClick={() => { setActiveMenu('beranda'); setMobileMenuOpen(false); }}
-                className="font-black text-base md:text-lg tracking-tight text-zinc-900 leading-none cursor-pointer"
-              >
+              <h1 className="font-black text-base md:text-lg tracking-tight text-zinc-900 leading-none">
                 KEPATIHAN BELAJAR
               </h1>
-              
-              {}
-              <button 
-                type="button"
-                onClick={handleSecretTripleTap}
-                className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400 cursor-pointer active:bg-emerald-300 transition-colors inline-block outline-none"
-              >
+              <span className="bg-emerald-100 text-emerald-900 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-400">
                 JBM
-              </button>
+              </span>
             </div>
             <p className="text-[10px] md:text-xs text-zinc-600 font-bold mt-0.5 line-clamp-1">
               Platform Belajar Seru KKN 064 UMY x PCM Pakualaman
